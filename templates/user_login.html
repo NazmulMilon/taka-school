@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Taka School Auction</title>
+
+    <!-- Font Icon -->
+    <link rel="stylesheet" href="{% static 'register/fonts/material-icon/css/material-design-iconic-font.min.css' %}">
+
+    <!-- Main css -->
+    <link rel="stylesheet" href="{% static 'register/css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+
+    
+</head>
+<body>
+
+    <!-- Sing in  Form -->
+<section class="sign-in">
+    <div class="container">
+        <div class="signin-content">
+            <div class="signin-image" id="m">
+                <figure><img src="{% static 'register/images/signin-image.jpg' %}" alt="sing up image"></figure>
+                <a href="{% url 'authentication:admin-login' %}" class="signup-image-link" id="s">Are You a Admin? Please Login</a>
+            </div>
+
+            <div class="signin-form">
+                <h2 class="form-title">Sign in</h2>
+                <form action="{% url 'authentication:user-login' %}" method="POST" class="register-form" id="login-form">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="username"><i class="zmdi zmdi-account material-icons-name"></i></label>
+                        <input type="email" name="email" id="email" placeholder="email" required/>
+                    </div>
+
+
+                    <div class="form-group form-button">
+                        <input type="submit" name="user-login" id="login" class="form-submit" value="Log in"/>
+                    </div>
+                    
+                </form>
+                
+            </div>
+        </div>
+    </div>
+</section>
+
+
+    <!-- JS -->
+    <script src="{% static 'register/vendor/jquery/jquery.min.js' %}"></script>
+    <script src="{% static 'register/js/main.js' %}"></script>
+</body><!-- This templates was made by Colorlib (https://colorlib.com) -->
+</html>

@@ -1,0 +1,1 @@
+web: gunicorn taka_school.wsgi

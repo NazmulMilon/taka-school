@@ -1,0 +1,58 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>
+        Taka School Auction | {% block title %}{% endblock %}
+    </title>
+    {% include 'partials/_css.html' %}
+</head>
+
+<body class="fixed-sn white-skin">
+
+<!-- Main Navigation -->
+<header>
+    {% include 'partials/_navbar.html' %}
+</header>
+
+<!-- Main Navigation -->
+
+<!-- Main layout -->
+<main style="padding-top: 67px;">
+    <div id="alert" class="wow fadeInDown position-absolute w-100"
+         data-wow-delay="0.3s">
+        {% block alert %}
+            {% include 'partials/_alert.html' %}
+        {% endblock %}
+    </div>
+
+    {% block main_content %}
+
+    {% endblock %}
+</main>
+<!-- Main layout -->
+
+<!-- Footer -->
+<footer class="page-footer pt-0 mt-5 rgba-stylish-light">
+    <!-- Copyright -->
+    <div class="footer-copyright py-3 text-center">
+        <div class="container-fluid">
+            &copy; 2021 Copyright: <a
+                href="#" target="_blank"> Taka School Auction </a>
+        </div>
+    </div>
+
+</footer>
+<!-- Footer -->
+
+<!-- SCRIPTS -->
+{% include 'partials/_scripts.html' %}
+
+</body>
+
+</html>

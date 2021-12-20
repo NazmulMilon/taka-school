@@ -1,0 +1,72 @@
+{% load static %}
+<!-- Navbar -->
+<nav class="navbar fixed-top navbar-expand-lg scrolling-navbar double-nav">
+
+    <!-- Logo -->
+    <div class="logo-sn waves-effect mr-auto ml-3">
+        <div class="text-center">
+            <a href="/" class="pl-0"
+               style="font-style: ;font-size: 1.4rem;">
+                Taka School Auction
+            </a>
+        </div>
+    </div>
+
+    <div class="d-flex">
+        <!-- Navbar links -->
+        <ul class="nav navbar-nav nav-flex-icons ml-auto"
+            style="font-size: 14px;">
+            <li class="nav-item ">
+                <a href="{% url 'auction:dashboard' %}" class="nav-link waves-effect
+{% if active == 'dashboard' %} btn aqua-gradient
+                      nav-item-selected text-white {% endif %}">
+                    <i class=" fas fa-tachometer-alt"></i>
+                    <span class="clearfix d-none d-sm-inline-block">
+                        Dashboard
+                    </span></a>
+            </li>
+            {% if request.user.is_admin %}
+                <li class="nav-item ">
+                    <a href="{% url 'auction:auction-gallery' %}"
+                       class="nav-link waves-effect
+                    {% if active == 'auction_gallery' %} btn aqua-gradient
+                      nav-item-selected text-white {% endif %}">
+                        <i class="fab fa-blackberry"></i>
+                        <span class="clearfix d-none
+                            d-sm-inline-block">Auction Gallery</span></a>
+                </li>
+            {% endif %}
+
+            {% if not request.user.is_admin %}
+            <li class="nav-item">
+                <a href="{% url 'auction:my-auctions' %}"
+                   class="nav-link waves-effect
+              {% if active == 'my_auctions' %} btn aqua-gradient
+                      nav-item-selected text-white {% endif %}">
+                    <i class="fab fa-blackberry"></i> <span
+                        class="clearfix d-none
+                            d-sm-inline-block">My posted items</span></a>
+            </li>
+            {% endif %}
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle waves-effect" href="#"
+                   id="userDropdown" data-toggle="dropdown"
+                   aria-haspopup="true" aria-expanded="false">
+                    <i class="fas fa-user"></i> <span
+                        class="clearfix d-none d-sm-inline-block"> Hi,
+                    {{ request.user.username|upper }}</span>
+                </a>
+                <div class="dropdown-menu dropdown-menu-right"
+                     aria-labelledby="userDropdown">
+                    <a class="dropdown-item"
+                       href="{% url 'authentication:logout' %}">Log Out</a>
+{#                    <a class="dropdown-item"#}
+{#                       href="{% url 'auction:create-auction' %}">Create#}
+{#                        Auction</a>#}
+                </div>
+            </li>
+        </ul>
+        <!-- Navbar links -->
+    </div>
+</nav>
+<!-- Navbar -->

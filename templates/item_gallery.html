@@ -1,0 +1,129 @@
+{% load static %}
+<div class="container">
+
+    <!-- Section: product cards -->
+    <section>
+        <div class="row d-flex align-content-center">
+
+            <h2 class="font-weight-bold  mt-lg-4"><strong>
+                {% if '/my-auctions/' in request.path %}
+                    My Auctions
+                {% else %}
+                    Auction Gallery
+                {% endif %}
+            </strong></h2>
+
+            {% if not request.user.is_admin %}
+                <!-- BUTTON: Create Auction Button -->
+                <div class="ml-auto mb-0 mr-3 d-flex flex-column-reverse justify-content-center">
+                    <a href="{% url 'auction:create-auction' %}"
+                       class="btn btn-outline-black btn-sm waves-button
+                waves-effect"
+                       style="font-size: 15px;">
+
+                        <i class="fas fa-plus-circle"></i> Create Auction
+                    </a>
+                </div>
+                <!-- BUTTON: Create Auction Button -->
+            {% endif %}
+
+        </div>
+
+        <div class="row pb-4">
+            {% for product in products %}
+                <div class="col-md-4 mb-4">
+                    <!-- Section: products -->
+                    <section>
+                        <!-- Card -->
+                        <div class="card card-cascade narrower"
+                             style="margin-top: 44px; height: 500px;">
+
+                            <!-- Card image -->
+                            <div class="view view-cascade overlay">
+                                <img src="{{ product.photo.url }}"
+                                     class="card-img-top"
+                                     alt="{{ product.name }}" style="height:
+                                      280px; border: 1px solid black;">
+                                <a href="{% url 'auction:item-detail' product.slug %}">
+                                    <div class="mask rgba-white-slight"></div>
+                                </a>
+                            </div>
+                            <!-- Card image -->
+
+                            <!-- Card content -->
+                            <div class="card-body card-body-cascade">
+                                <div class="d-flex justify-content-between">
+                                    <div class="d-flex
+                                    justify-content-sm-start w-50">
+                                        <h5 style="color: #3a3d3d">
+                                            <i class="fas fa-dollar-sign"></i>
+                                            {% if product.get_max_bid is not None %}
+                                                {{ product.get_max_bid.price }}
+                                            {% else %}
+                                                {{ product.min_bid_price }}
+                                            {% endif %}
+                                        </h5>
+                                        <span style="font-size: 11px;
+                                        padding: 7px 7px 3px 5px;
+                                        height: 24px;"
+                                              class="badge badge-pill
+                                              badge-light ml-3">
+                                    {{ product.get_total_bid }}
+                                    bid{{ product.get_total_bid|pluralize:'s' }}
+                                </span>
+                                    </div>
+
+                                    <h5 class="pink-text w-50 text-right">
+                                        {% if product.get_is_auction_time_ended %}
+                                            Auction Ended
+                                        {% else %}
+                                            <i class="far fa-clock"></i>
+                                            {{ product.auction_end_date }}
+                                        {% endif %}
+                                    </h5>
+                                </div>
+                                <h6>
+                                    {{ product.user.username|capfirst }}
+                                </h6>
+                                <!-- Title -->
+
+                                <h4 class="card-title">
+                                    <a style="color:#0e6161"
+                                       href="{% url 'auction:item-detail' product.slug %}"
+                                       class="card-link waves-effect waves-ripple">
+                                        {{ product.name }}
+                                    </a>
+                                </h4>
+
+                                <!-- Text -->
+                                <p class="card-text">
+                                    {{ product.description|slice:":90" }}
+                                    {% if product.description|length > 90 %}...{% endif %}
+                                </p>
+
+                            </div>
+                            <!-- Card content -->
+
+                        </div>
+                        <!-- Card -->
+
+                    </section>
+                    <!-- Section: Live preview -->
+                </div>
+            {% endfor %}
+
+
+        </div>
+
+    </section>
+    <!-- Section: Cascading cards -->
+
+</div>
+
+
+
+
+
+
+
+

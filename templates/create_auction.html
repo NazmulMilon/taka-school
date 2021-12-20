@@ -1,0 +1,135 @@
+{% extends 'base.html' %}
+{% block title %}Create Auction{% endblock %}
+{% block main_content %}
+
+    <div class="row d-flex justify-content-center mt-4">
+        <!-- column -->
+        <div class="col-lg-7 mb-4">
+
+            <!-- Card -->
+            <div class="card card-cascade narrower">
+
+                <div class="view view-cascade
+                        gradient-card-header rgba-light-green-light">
+                    <h4 class="mb-0 font-weight-bold dark-grey-text">
+                        Create New Auction
+                    </h4>
+                </div>
+
+                <div class="card-body card-body-cascade text-center">
+                    <form id="auction_create_form" name="auction_create_form"
+                          enctype="multipart/form-data"
+                          method="POST"
+                          action="{% url 'auction:create-auction' %}">
+                        {% csrf_token %}
+                        <!-- Name -->
+                        <div class="md-form form-sm">
+                            <input type="text" id="product_name"
+                                   class="form-control validate"
+                                   name="product_name"
+                                   value="{{ product_name }}"
+                                   required>
+                            <label for="product_name"
+                                   style="font-size:1rem;"
+                                   class="">Product
+                                Name</label>
+                        </div>
+
+                        <!-- Description -->
+                        <div class="md-form mb-0">
+                            <textarea type="text" id="product_description"
+                                      class="md-textarea validate" cols="77"
+                                      rows="1"
+                                      name="product_description"
+                                      required>{{ product_description }}</textarea>
+                            <label for="product_description"
+                                   style="font-size:1rem;">Product
+                                Description</label>
+                        </div>
+
+                        <!-- Photo -->
+                        <div class="md-form mt-0">
+                            <div class="input-group">
+                                <div class="input-group-prepend"
+                                     style="margin-top: 12px;">
+                                    <span class="input-group-text"
+                                          id="inputGroupFileAddon01">
+                                        Choose Product Photo</span>
+                                </div>
+                                <div class="custom-file">
+                                    <input type="file"
+                                           style="cursor:pointer;"
+                                           name="product_photo"
+                                           class="custom-file-input validate"
+                                           id="product_photo" required
+                                           aria-describedby="inputGroupFileAddon01">
+                                    <label class="custom-file-label"
+                                           for="product_photo"> </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- min bid price -->
+                        <div class="md-form ">
+                            <input type="number" id="min_bid_price"
+                                   name="min_bid_price"
+                                   class="form-control"
+                                   value="{{ min_bid_price }}"
+                                   required>
+                            <label for="min_bid_price"
+                                   style="font-size:1rem;"
+                                   class="form-label validate">
+                                Minimum Bid Price (Dollar)</label>
+                        </div>
+
+                        <div class="row d-flex justify-content-around">
+                            <!-- Auction end date -->
+                            <div class="md-form w-50 pr-lg-5">
+                                <input type="text"
+                                       name="auction_end_date"
+                                       id="auction_end_date"
+                                       class="form-control datepicker"
+                                       required>
+                                <label for="auction_end_date">
+                                    Select Auction End Date</label>
+                            </div>
+
+                            <!-- Auction end time -->
+                            <div class="md-form w-50">
+                                <input type="text"
+                                       id="auction_end_time"
+                                       name="auction_end_time"
+                                       value="{{ auction_end_time }}"
+                                       class="form-control timepicker"
+                                       required>
+                                <label for="auction_end_time"
+                                       class="active">Select Auction End
+                                    time</label>
+                            </div>
+                            <!--  Auction end time -->
+                        </div>
+
+                        <!-- Footer -->
+                        <div class="modal-footer justify-content-center">
+                            <button type="reset"
+                                    name="ResetForm"
+                                    id="ResetForm"
+                                    class="btn btn-outline-primary">
+                                Reset
+                            </button>
+                            <button type="submit" class="btn
+                            btn-primary">Create Auction
+                                <i class="fas fa-paper-plane ml-1"></i>
+                            </button>
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+            <!-- Card -->
+        </div>
+
+
+    </div>
+
+{% endblock %}

@@ -1,0 +1,283 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Dashboard{% endblock %}
+
+{% block main_content %}
+
+    {% if not request.user.is_admin %}
+        {% include 'item_gallery.html' %}
+    {% endif %}
+
+    {% if request.user.is_admin %}
+{#        <!-- BUTTON: Create Auction Button -->#}
+{#        <div class="container-fluid  ">#}
+{#            <div class="ml-auto mb-0 mr-3 d-flex#}
+{#            justify-content-end">#}
+{#                <a href="{% url 'auction:create-auction' %}"#}
+{#                   class="btn btn-outline-black btn-sm waves-button#}
+{#                   waves-effect"#}
+{#                   style="font-size: 15px;">#}
+{#                    <i class="fas fa-plus-circle"></i> Create Auction#}
+{#                </a>#}
+{#            </div>#}
+{#            <!-- BUTTON: Create Auction Button -->#}
+
+            <!-- Section: Intro -->
+            <section class="mt-md-4 pt-md-2 mb-5 pb-4">
+
+                <!-- Grid row -->
+                <div class="row d-flex justify-content-center">
+
+                    <!-- Grid column -->
+                    <div class="col-xl-5 col-md-6 mb-xl-0 mb-4" >
+
+                        <!-- Card -->
+                        <div class="card card-cascade cascading-admin-card"
+                             style="height: 333px;">
+
+                            <!-- Card Data -->
+                            <div class="admin-up" >
+                                <i class="fas fa-chart-line warning-color mr-3 z-depth-2"></i>
+                                <div class="data">
+                                    <p class="text-uppercase"
+                                       style="font-size: 20px">
+                                        Running Auction</p>
+                                    <h4 class="font-weight-bold dark-grey-text">
+                                        {{ running_auctions_count }}</h4>
+                                </div>
+                            </div>
+
+                            <!-- Card content -->
+                            <div class="card-body card-body-cascade">
+                                <div class="progress mb-3">
+                                    <div class="progress-bar red accent-2"
+                                         role="progressbar" style="width: 25%"
+                                         aria-valuenow="25"
+                                         aria-valuemin="0"
+                                         aria-valuemax="100"></div>
+                                </div>
+                                <p class="card-text">Total number auction
+                                    ({{ total_auctions }})
+                                </p>
+                            </div>
+
+                        </div>
+                        <!-- Card -->
+
+                    </div>
+                    <!-- Grid column -->
+
+                    <!-- Grid column -->
+                    <div class="col-xl-5 col-md-6 mb-xl-0 mb-4" id="a">
+
+                        <!-- Card -->
+                        <div class="card card-cascade cascading-admin-card"
+                             style="height: 333px; weight:52px">
+
+                            <!-- Card Data -->
+                            <div class="admin-up">
+                                <i class="far fa-money-bill-alt red mr-3
+                                 z-depth-2"></i>
+                                <div class="data">
+                                    <p class="text-uppercase"
+                                       style="font-size: 20px">Running
+                                        Auctions<br>
+                                        Value</p>
+                                    <h4 class="font-weight-bold dark-grey-text">
+                                        ${{ running_auctions_total_value }}</h4>
+                                </div>
+                            </div>
+
+                            <!-- Card content -->
+                            <div class="card-body card-body-cascade">
+                                <div class="progress mb-3">
+                                    <div class="progress-bar bg-primary"
+                                         role="progressbar" style="width: 25%"
+                                         aria-valuenow="25"
+                                         aria-valuemin="0"
+                                         aria-valuemax="100"></div>
+                                </div>
+
+                            </div>
+
+                        </div>
+                        <!-- Card -->
+
+                    </div>
+                    <!-- Grid column -->
+
+                </div>
+                <!-- Grid row -->
+
+            </section>
+            <!-- Section: Intro -->
+
+            <!-- Section: Main panel -->
+            <section class="mb-5">
+
+                <!-- Card -->
+                <div class="card card-cascade narrower mt-5">
+                    <!-- Section: Chart : Number of Auctions -->
+                    <section>
+                        <!-- Grid row -->
+                        <div class="row">
+                            <!-- Grid column -->
+                            <div class="col-xl-3 col-lg-12 mr-0 pb-2">
+
+                                <!-- Card image -->
+                                <div class="view view-cascade gradient-card-header light-blue lighten-1">
+                                    <h3 class="h2-responsive mb-0
+                                    font-weight-500">
+                                        Number of Auctions</h3>
+                                </div>
+
+                                <!-- Card content -->
+                                <div class="card-body card-body-cascade pb-0">
+
+                                    <!-- Panel data -->
+                                    <div class="row py-3 pl-4">
+
+                                        <!-- First column -->
+                                        <div class="col-md-12">
+
+                                            <!-- Date select -->
+                                            <p class="lead"><span
+                                                    class="badge info-color p-2">Data range</span>
+                                            </p>
+                                            <label for="time_range">Choose a
+                                                time range:</label>
+                                            <select name="time_range"
+                                                    class="mdb-select colorful-select
+                                                    dropdown-info md-form"
+                                                    id="time_range">
+                                                <option selected value="day">
+                                                    Day
+                                                </option>
+                                                <option value="hour">Hour
+                                                </option>
+                                                <option
+                                                        value="minute">Minute
+                                                </option>
+                                            </select>
+                                        </div>
+                                        <!-- First column -->
+
+                                    </div>
+                                    <!-- Panel data -->
+
+                                </div>
+                                <!-- Card content -->
+
+                            </div>
+                            <!-- Grid column -->
+
+                            <!-- Grid column -->
+                            <div class="col-xl-9 col-lg-12 mb-4 pb-2">
+
+                                <!-- Card image -->
+
+                                <!-- Card image -->
+
+                                <!-- Card content -->
+                                <div class="card-body card-body-cascade text-center">
+
+                                    <canvas id="barChart"
+                                            height="175px"></canvas>
+                                </div>
+                                <!-- Card content -->
+
+                            </div>
+                            <!-- Grid column -->
+                        </div>
+                        <!-- Grid row -->
+
+                    </section>
+                    <!-- Section: Chart : Number of Auctions -->
+                </div>
+                <!-- Card -->
+
+
+                <!-- Card -->
+                <div class="card card-cascade narrower">
+
+                    <!-- Section: Chart :Total Auction Value-->
+                    <section>
+                        <!-- Grid row -->
+                        <div class="row">
+                            <!-- Grid column -->
+                            <div class="col-xl-3 col-lg-12 mr-0 pb-2">
+
+                                <!-- Card image -->
+                                <div class="view view-cascade gradient-card-header light-blue lighten-1">
+                                    <h3 class="h2-responsive mb-0
+                                    font-weight-500">
+                                        Total Auction Value</h3>
+                                </div>
+
+                                <!-- Card content -->
+                                <div class="card-body card-body-cascade pb-0">
+
+                                    <!-- Panel data -->
+                                    <div class="row py-3 pl-4">
+
+                                        <!-- First column -->
+                                        <div class="col-md-12">
+
+                                            <!-- Date select -->
+                                            <p class="lead"><span
+                                                    class="badge info-color p-2">Data range</span>
+                                            </p>
+                                            <label for="time_range_total_value">Choose a
+                                                time range:</label>
+                                            <select name="time_range_total_value"
+                                                    class="mdb-select colorful-select
+                                                    dropdown-info md-form"
+                                                    id="time_range_total_value">
+                                                <option selected value="day">
+                                                    Day
+                                                </option>
+                                                <option value="hour">Hour
+                                                </option>
+                                                <option
+                                                        value="minute">Minute
+                                                </option>
+                                            </select>
+
+                                        </div>
+                                        <!-- First column -->
+
+                                    </div>
+                                    <!-- Panel data -->
+
+                                </div>
+                                <!-- Card content -->
+
+                            </div>
+                            <!-- Grid column -->
+
+                            <!-- Grid column -->
+                            <div class="col-xl-9 col-lg-12 mb-4 pb-2">
+
+                                <!-- Chart -->
+                                <div class="view view-cascade gradient-card-header blue-gradient">
+
+                                    <canvas id="lineChart"
+                                            height="175"></canvas>
+                                </div>
+
+                            </div>
+                            <!-- Grid column -->
+                        </div>
+                        <!-- Grid row -->
+
+                    </section>
+                    <!-- Section: Chart :Total Auction Value -->
+
+                </div>
+                <!-- Card -->
+            </section>
+            <!-- Section: Main panel -->
+
+        </div>
+    {% endif %}
+{% endblock %}

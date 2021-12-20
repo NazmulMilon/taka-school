@@ -1,0 +1,303 @@
+{% extends 'base.html' %}
+{% block title %}Item: {{ selected_product.name }}{% endblock %}
+{% block main_content %}
+    <div class="container-fluid mt-5">
+
+        <!-- Section -->
+        <section class="section">
+            <!-- First row -->
+            <div class="row mb-4">
+                <!-- First column -->
+                <div class="col-lg-5 mb-4">
+                    <!-- Card -->
+                    <div class="card card-cascade narrower">
+                        <!-- Card content -->
+                        <div class="card-header p-4" style="background:
+                        #e5f6d2;">
+                            <div class="d-flex justify-content-end flex-column">
+
+                                <h5 class="mb-3">Auctioneer:
+                                    <span class="badge black"
+                                          style="font-size: 18px">
+                                {{ selected_product.user.username|capfirst }}</span>
+                                </h5>
+
+                                <h5>Auction Ends At:
+                                    <span class="badge black"
+                                          style="font-size: 18px">
+                                {{ selected_product.auction_end_date }}</span>
+                                </h5>
+
+                                <div class="d-flex justify-content-center">
+                                    <span class="badge w-75"
+                                          id="auction_end_date_count"
+                                          style="font-size: 20px;background:#fd5b55;">
+                                    {% if selected_product.get_is_auction_time_ended %}
+                                        Auction Ended
+                                    {% else %}
+                                        {{ selected_product.auction_end_date|timeuntil }}
+                                        Left
+                                    {% endif %}
+                                    </span>
+                                </div>
+
+
+                            </div>
+                            <div class="d-flex justify-content-start mt-3">
+                                <h5>Minimum Bid Price:
+                                    <span class="badge black"
+                                          style="font-size: 18px">
+                                <i class="fas fa-dollar-sign"></i>
+                                        {{ selected_product.min_bid_price }}</span>
+                                </h5>
+                            </div>
+
+                        </div>
+
+                        <div class="card-body p-3 border-dark">
+                            {% if selected_product.get_is_auction_time_ended %}
+                                <!--  IF THE BIDDING TIME IS ENDED -->
+                                <div class="d-flex flex-xl-column">
+
+                                    <span style="font-size: 20px;">
+                                        {% if selected_product.get_max_bid is not None %}
+                                            Bid Winner:
+                                            '
+                                            {{ selected_product.get_max_bid.bidder.username|upper }}
+                                            '
+                                        {% else %}
+                                            No Bidder for this Product
+                                        {% endif %}
+                                    </span>
+                                    <span style="font-size: 20px;">
+                                        {% if selected_product.get_max_bid is not None %}
+                                            Winning Price:
+                                            <i class="fas fa-dollar-sign"></i>
+                                            {{ selected_product.get_max_bid.price }}
+                                            <span style="font-size: 14px;
+                                            padding: 0 3px 0 5px;
+                                            height: 24px;"
+                                                  class="badge badge-pill
+                                                  badge-light ml-3 p-2">
+                                                {{ selected_product.get_total_bid }}
+                                                bid{{ selected_product.get_total_bid|pluralize:'s' }}
+                                            </span>
+                                        {% endif %}
+                                    </span>
+                                </div>
+                                <!--  IF THE BIDDING TIME IS ENDED -->
+                            {% else %}
+                                <!--  IF THE BIDDING TIME IS NOT ENDED -->
+                                <div class="d-flex">
+                                    <span style="font-size: 20px;">
+                                        {% if selected_product.get_max_bid is not None %}
+                                            Highest Bid
+                                            <i class="fas fa-dollar-sign"></i>
+                                            {{ selected_product.get_max_bid.price }}
+                                        {% endif %}
+                                    </span>
+                                    <span style="font-size: 13px;"
+                                          class="badge badge-pill
+                                          badge-light ml-3 p-2">
+                                        {{ selected_product.get_total_bid }}
+                                        bid{{ selected_product.get_total_bid|pluralize:'s' }}
+                                    </span>
+                                </div>
+                                <div>
+                                    <!-- Bid Form -->
+                                    <form method="POST"
+                                          action="{% url 'auction:place-bid' selected_product.slug %}"
+                                          name="bid_create_form">
+                                        {% csrf_token %}
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="md-form mb-0">
+                                                    <input type="number"
+                                                           id="bid_price"
+                                                           class="form-control
+                                                                validate mb-3"
+                                                           name="bid_price"
+                                                           value="{% if selected_product.get_max_bid is not None %}{{ selected_product.get_max_bid.price }}{% else %}{{ selected_product.min_bid_price }}{% endif %}">
+                                                    <label for="bid_price"
+                                                           data-error="wrong price"
+                                                           data-success="right">
+                                                        Place Your Maximum Bid
+                                                    </label>
+                                                </div>
+                                                <div class="w-100 text-center">
+                                                    <button
+                                                            class="btn w-75 mt-4
+                                                            font-weight-bold
+                                                            blue-gradient
+                                                            btn-rounded
+                                                            waves-effect
+                                                            waves-light"
+                                                            type="submit"
+                                                            style="font-size: 15px;">
+                                                        PLACE BID
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                    <!-- bid Form -->
+                                </div>
+                                <!--  IF THE BIDDING TIME IS NOT ENDED -->
+                            {% endif %}
+                        </div>
+                        <!-- Card content -->
+
+                    </div>
+                    <!-- Card -->
+
+                </div>
+                <!-- First column -->
+
+                <!-- Second column -->
+                <div class="col-lg-7 mb-4">
+
+                    <!-- Card -->
+                    <div class="card card-cascade narrower">
+
+                        <div class="view view-cascade
+                            gradient-card-header rgba-light-green-light">
+                            <h4 class="mb-0 font-weight-bold dark-grey-text">
+                                {{ selected_product.name }}</h4>
+                        </div>
+
+                        <!-- Card content -->
+                        <div class="card-body card-body-cascade text-center">
+                            <img src="{{ selected_product.photo.url }}"
+                                 alt="{{ selected_product.name }}"
+                                 class="z-depth-1 mb-3 mx-auto w-100 h-75"/>
+                            <hr>
+                            <h5 class="d-flex align-content-start mt-4">
+                                Description</h5>
+
+                            <div class="mw-100" style="
+                                                color: #5c5a5a;
+                                                text-align: left;
+                                                font-size: 14px;
+                                                font-weight: 400;
+                                                letter-spacing: 0.5px;
+                                                line-height: 22px;">
+                                {{ selected_product.description }}
+                            </div>
+                        </div>
+                        <!-- Card content -->
+                    </div>
+                    <!-- Card -->
+                </div>
+                <!-- Second column -->
+            </div>
+            <!-- First row -->
+            <div class="row d-flex justify-content-center">
+                <div class="col-md-10 mb-1">
+                    <div class="card card-cascade narrower z-depth-1">
+                        <div class="view view-cascade gradient-card-header
+                        blue-gradient narrower  mx-4 mb-3 d-flex
+                        justify-content-center align-items-center">
+                            <a class="white-text mx-3" style="font-size:
+                            20px;">
+                                Bidding List
+                            </a>
+                        </div>
+
+                        <div class="card-body">
+                            <!-- Table BIDDING LIST -->
+                            <table class="table">
+                                <!-- Table head -->
+                                <thead class="mdb-color darken-3">
+                                <tr class="text-white">
+                                    <th>#</th>
+                                    <th>Bidder</th>
+                                    <th>Price</th>
+                                    <th>Bidding Datetime</th>
+                                    <th>Action</th>
+                                </tr>
+                                </thead>
+                                <!-- Table head -->
+
+                                <!-- Table body -->
+                                <tbody>
+                                {% for bid in bids %}
+                                    <tr>
+                                        <th scope="row">{{ forloop.counter }}</th>
+                                        <td>{{ bid.bidder.username|capfirst }}
+                                        </td>
+                                        <td>
+                                            <div id="bid_price_{{ bid.hashed_id }}">
+                                                <i class="fas fa-dollar-sign"></i>
+                                                {{ bid.price }}
+                                            </div>
+                                            <form method="POST"
+                                                  id="update_bid_form_{{ bid.hashed_id }}"
+                                                  action="{% url 'auction:update-bid' selected_product.slug bid.hashed_id %}">
+                                                {% csrf_token %}
+                                                <input type='number'
+                                                       name="updated_bid_price"
+                                                       id="bid_price_input_{{ bid.hashed_id }}"
+                                                       value="{{ bid.price }}"
+                                                       style="display: none;">
+                                            </form>
+                                        </td>
+                                        <td>
+                                            {{ bid.updated_at|date:'Y-m-d :: h:i:s' }}</td>
+                                        <td>
+                                            {% if request.user.id == bid.bidder.id and not selected_product.get_is_auction_time_ended %}
+                                                <a class="teal-text"
+                                                   id="btn_edit_price_{{ bid.hashed_id }}"
+                                                   onclick="edit_bid_price('{{ bid.hashed_id }}')"
+                                                   data-toggle="tooltip"
+                                                   data-placement="right"
+                                                   title="Edit"
+                                                   data-original-title="Edit">
+                                                    <i class="far fa-edit"
+                                                       style="font-size:20px;"></i></a>
+                                                <div class="d-flex
+                                                    justify-content-around">
+                                                    <a class="teal-text"
+                                                       style="display: none;"
+                                                       id="btn_edit_price_save_{{ bid.hashed_id }}"
+                                                       onclick="save_edit_bid_price('{{ bid.hashed_id }}')"
+                                                       data-toggle="tooltip"
+                                                       data-placement="left"
+                                                       title="Save"
+                                                       data-original-title="Save">
+                                                        <i class="far fa-save"
+                                                           style="font-size:20px;"></i></a>
+
+                                                    <a class="teal-text"
+                                                       style="display: none;"
+                                                       id="btn_edit_price_cancel_{{ bid.hashed_id }}"
+                                                       onclick="cancel_edit_bid_price('{{ bid.hashed_id }}')"
+                                                       data-toggle="tooltip"
+                                                       data-placement="right"
+                                                       title="Cancel"
+                                                       data-original-title="Cancel">
+                                                        <i class="far fa-window-close"
+                                                           style="font-size:20px;"></i></a>
+                                                </div>
+
+                                            {% else %} -
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+
+                                </tbody>
+                                <!-- Table body -->
+                            </table>
+                            <!-- Table -->
+
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+        <!-- Section -->
+    </div>
+{% endblock %}
