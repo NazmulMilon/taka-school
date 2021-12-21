@@ -51,7 +51,6 @@ def user_login(request):
                 )
                 if authenticated_admin is not None:
                     login(request, authenticated_admin)
-                    messages.success(request, f'Hi, {username} welcome back!')
                     return redirect(USER_LOGIN_REDIRECT_URL)
                 else:
                     messages.error(request, 'Invalid Credentials!')
@@ -89,10 +88,6 @@ def user_login(request):
                     user.username = email.split('@')[0]
                     user.save()
                     login(request, user)
-                    messages.success(
-                        request,
-                        f"Welcome {user.username} to Taka.School Auction!"
-                    )
                     return redirect(USER_LOGIN_REDIRECT_URL)
                 except Exception as e:
                     # print(e)
@@ -104,7 +99,6 @@ def user_login(request):
 
                 if requested_user:
                     login(request, requested_user)
-                    messages.success(request, f'Hi, {email} welcome back!')
                     return redirect(USER_LOGIN_REDIRECT_URL)
                 else:
                     messages.error(request, 'Invalid!')

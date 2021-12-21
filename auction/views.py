@@ -10,27 +10,13 @@ from auction.models import Product, Bid
 ''''''
 import datetime
 from django.contrib.auth.decorators import login_required
-from django.db.models.functions import (
-    ExtractDay,
-    ExtractHour,
-    ExtractMinute
-)
+from django.db.models.functions import (ExtractDay, ExtractHour, ExtractMinute )
 from django.http import JsonResponse
 from django.shortcuts import render
 
 from auction.models import Product, Bid
-from authentication.utils import (
-    days,
-    colorPrimary,
-    colorPrimaryBorder,
-    colorDanger,
-    colorDangerBorder,
-    get_day_dict,
-    hours,
-    get_hour_dict,
-    minutes,
-    get_minute_dict
-)
+from authentication.utils import (days, colorPrimary, colorPrimaryBorder,
+    colorDanger, colorDangerBorder, get_day_dict, hours, get_hour_dict, minutes, get_minute_dict)
 
 
 @login_required(login_url='authentication:user-login')
@@ -47,9 +33,7 @@ def item_details(request, slug):
 
     #Auction item detail info
     selected_product = get_object_or_404(Product, slug=slug)
-    selected_products_bids = Bid.objects.filter(
-        product=selected_product
-    ).order_by('-price')
+    selected_products_bids = Bid.objects.filter( product=selected_product).order_by('-price')
 
     context = {
         'selected_product': selected_product,
@@ -83,10 +67,7 @@ def create_auction(request):
             messages.error(request, 'Please give a product name!')
             return render(request, create_auction_template, context)
         if product_description.strip() == '':
-            messages.error(
-                request,
-                'Please write some description about the product!'
-            )
+            messages.error(request,'Please write some description about the product!')
             return render(request, create_auction_template, context)
         if product_photo == '':
             messages.error(request, 'Please add a photo of the product!')
@@ -119,10 +100,6 @@ def create_auction(request):
                     min_bid_price=min_bid_price,
                     auction_end_date=timezone_aware_auction_end_datetime,
                     user=request.user,
-                )
-                messages.success(
-                    request,
-                    "New auction Item is added to auction gallery."
                 )
                 return redirect('auction:dashboard')
             except Exception as e:
@@ -164,7 +141,6 @@ def place_bid(request, slug):
                 bidder=request.user,
                 price=bid_price
             )
-            messages.success(request, 'You have placed the bid successfully')
             return redirect(product)
         except Exception as e:
             # print(e)
@@ -185,10 +161,7 @@ def update_bid(request, slug, hashed_id):
         try:
             bid.price = updated_bid_price
             bid.save()
-            messages.success(
-                request,
-                f"You have update the bid price to {updated_bid_price}"
-            )
+
             return redirect('auction:item-detail', slug=slug)
         except Exception as e:
             # print(e)
@@ -205,10 +178,6 @@ def update_bid(request, slug, hashed_id):
 def dashboard(request):
     """
     User and Admin Dashboard
-    :param request:
-    :type request:
-    :return:
-    :rtype:
     """
     products = Product.objects.filter(is_active=True).order_by('-created_at')
     total_auctions = products.count()
@@ -249,10 +218,6 @@ def dashboard(request):
 def created_completed_auction_day_chart(request):
     """
     Chart for number of created and completed auctions in each day
-    :param request:
-    :type request:
-    :return:
-    :rtype:
     """
     # NUMBER OF AUCTION CREATED DATA GENERATION FOR DAY CHART
     list_of_product_created_date_dict = Product.objects.filter(
@@ -301,10 +266,7 @@ def created_completed_auction_day_chart(request):
 def created_completed_auction_hour_chart(request):
     """
     Chart for number of created and completed auctions in each hour
-    :param request:
-    :type request:
-    :return:
-    :rtype:
+
     """
 
     # NUMBER OF AUCTION CREATED DATA GENERATION FOR HOUR CHART
@@ -361,10 +323,6 @@ def created_completed_auction_hour_chart(request):
 def created_completed_auction_minute_chart(request):
     """
     Chart for number of created and completed auctions in each minute
-    :param request:
-    :type request:
-    :return:
-    :rtype:
     """
 
     # NUMBER OF AUCTION CREATED DATA GENERATION FOR MINUTE CHART
@@ -422,17 +380,7 @@ def created_completed_auction_minute_chart(request):
 
 
 def create_data_for_chart(list_of_product, time_range, time_range_dict):
-    """
-    Helper function to generate data for chart
-    :param list_of_product: list of all auction products
-    :type list_of_product: list
-    :param time_range: chart data time range
-    :type time_range: str
-    :param time_range_dict: dictionary of all time range with value zero
-    :type time_range_dict: func
-    :return: number of the created or completed auction product with time range
-    :rtype: dict
-    """
+
     time_freq = {}
     for item in list_of_product:
         if item[time_range] in time_freq:
@@ -469,13 +417,7 @@ def create_data_for_chart(list_of_product, time_range, time_range_dict):
 
 @login_required(login_url='authentication:user-login')
 def total_auction_value_day_chart(request):
-    """
-    Chart for total auctions value based on the latest bid placed in each day
-    :param request:
-    :type request:
-    :return:
-    :rtype:
-    """
+  
     products = Product.objects.filter(is_active=True).order_by('-created_at')
     auction_day_value = {}
     if products.count() > 0:
@@ -511,13 +453,7 @@ def total_auction_value_day_chart(request):
 
 @login_required(login_url='authentication:user-login')
 def total_auction_value_hour_chart(request):
-    """
-    Chart for total auctions value based on the latest bid placed in each hour
-    :param request:
-    :type request:
-    :return:
-    :rtype:
-    """
+    
     products = Product.objects.filter(is_active=True).order_by('-created_at')
     hours_total_price = {}
     if products.count() > 0:
@@ -551,13 +487,7 @@ def total_auction_value_hour_chart(request):
 
 @login_required(login_url='authentication:user-login')
 def total_auction_value_minute_chart(request):
-    """
-    Chart for total auctions value based on the latest bid placed in each minute
-    :param request:
-    :type request:
-    :return:
-    :rtype:
-    """
+  
     products = Product.objects.filter(is_active=True).order_by('-created_at')
     minutes_total_price = {}
     if products.count() > 0:
